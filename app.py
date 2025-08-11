@@ -3,6 +3,10 @@ import requests
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Welcome to the Book Info API! Use /book?title=... or /author?name=... endpoints."
+
 # Search book by title
 @app.route("/book")
 def get_book_by_title():
