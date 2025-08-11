@@ -1,50 +1,50 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import requests
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
-    return "Welcome to the Book Info API! Use /book?title=... or /author?name=... endpoints."
+    return render_template("index.html")
 
-# Search book by title
-@app.route("/book")
-def get_book_by_title():
-    title = request.args.get("title")
-    if not title:
-        return jsonify({"error": "Please provide a title"}), 400
-    
-    url = f"https://openlibrary.org/search.json?title={title}"
-    r = requests.get(url)
-    data = r.json()
+@app.route("/search", methods=["POST"])
+def search():
+    search_type = request.form.get("search_type")
+    query = request.form.get("query")
 
-    if data["numFound"] == 0:
-        return jsonify({"message": "No books found"}), 404
+    if not search_type or not query:
+        return render_template("result.html", error="Please select search type and enter a query.")
 
-    book = data["docs"][0]
-    return jsonify({
-        "title": book.get("title"),
-        "author": book.get("author_name", []),
-        "first_publish_year": book.get("first_publish_year"),
-        "isbn": book.get("isbn", [None])[0]
-    })
+    if search_type == "book":
+        url = f"https://openlibrary.org/search.json?title={query}"
+        r = requests.get(url)
+        data = r.json()
+        if data["numFound"] == 0:
+            return render_template("result.html", error="No books found.", search_type=search_type)
+        book = data["docs"][0]
+        result = {
+            "title": book.get("title"),
+            "author": book.get("author_name", []),
+            "first_publish_year": book.get("first_publish_year"),
+            "isbn": book.get("isbn", [None])[0]
+        }
+        return render_template("result.html", result=result, search_type=search_type)
 
-# Search books by author
-@app.route("/author")
-def get_books_by_author():
-    author = request.args.get("name")
-    if not author:
-        return jsonify({"error": "Please provide an author name"}), 400
+    elif search_type == "author":
+        url = f"https://openlibrary.org/search.json?author={query}"
+        r = requests.get(url)
+        data = r.json()
+        if data["numFound"] == 0:
+            return render_template("result.html", error="No books found.", search_type=search_type)
+        books = [doc.get("title") for doc in data["docs"]]
+        result = {
+            "author": query,
+            "books": books
+        }
+        return render_template("result.html", result=result, search_type=search_type)
 
-    url = f"https://openlibrary.org/search.json?author={author}"
-    r = requests.get(url)
-    data = r.json()
-
-    if data["numFound"] == 0:
-        return jsonify({"message": "No books found"}), 404
-
-    books = [doc.get("title") for doc in data["docs"]]
-    return jsonify({"author": author, "books": books})
+    else:
+        return render_template("result.html", error="Invalid search type.")
 
 if __name__ == "__main__":
     import os
