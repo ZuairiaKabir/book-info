@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 2rem auto;
+            background: linear-gradient(135deg, #f0f4f8, #d9eafc);
+            color: #333;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #2c3e50;
+            border-bottom: 3px solid #2980b9;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        h2 {
+            color: #2980b9;
+            margin-bottom: 0.5rem;
+        }
+
+        .result {
+            background: #ffffff;
+            padding: 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            animation: slideIn 0.6s ease-in-out;
+        }
+
+        .result:hover {
+            transform: translateY(-3px);
+        }
+
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #fceaea;
+            padding: 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        ul {
+            background: #fff;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            list-style: none;
+            animation: slideIn 0.6s ease-in-out;
+        }
+
+        ul li {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        a:hover {
+            background: linear-gradient(135deg, #1c5980, #2471a3);
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Search Results</h1>
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% else %}
+    {% if search_type == 'book' %}
+    <div class="result">
+        <h2>{{ result.title }}</h2>
+        <p><strong>Author(s):</strong> {{ result.author | join(', ') }}</p>
+        <p><strong>First Published:</strong> {{ result.first_publish_year }}</p>
+        <p><strong>ISBN:</strong> {{ result.isbn if result.isbn else 'N/A' }}</p>
+    </div>
+    {% elif search_type == 'author' %}
+    <h2>📚 Books by {{ result.author }}</h2>
+    <ul>
+        {% for book in result.books %}
+        <li>{{ book }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
+
+    <a href="/">⬅ Search Again</a>
+</body>
+
+</html>
