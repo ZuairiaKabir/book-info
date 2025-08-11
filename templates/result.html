@@ -3,15 +3,15 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Search Results</title>
+    <title>Book Info Result</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 700px;
+            max-width: 900px;
             margin: 2rem auto;
             background: linear-gradient(135deg, #f0f4f8, #d9eafc);
             color: #333;
-            padding: 0 1rem;
+            padding: 0 1rem 2rem;
         }
 
         h1 {
@@ -24,14 +24,16 @@
             animation: fadeIn 0.8s ease-in-out;
         }
 
-        h2 {
+        h2,
+        h3 {
             color: #2980b9;
             margin-bottom: 0.5rem;
         }
 
-        .result {
+        .book-info,
+        .author-info {
             background: #ffffff;
-            padding: 1.2rem;
+            padding: 1.5rem;
             border-radius: 10px;
             margin-bottom: 1.5rem;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
@@ -39,7 +41,8 @@
             animation: slideIn 0.6s ease-in-out;
         }
 
-        .result:hover {
+        .book-info:hover,
+        .author-info:hover {
             transform: translateY(-3px);
         }
 
@@ -71,7 +74,12 @@
             border-bottom: none;
         }
 
-        a {
+        .rating {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        a.back-link {
             display: inline-block;
             margin-top: 1rem;
             text-decoration: none;
@@ -83,7 +91,7 @@
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
-        a:hover {
+        a.back-link:hover {
             background: linear-gradient(135deg, #1c5980, #2471a3);
             transform: scale(1.05);
         }
@@ -138,29 +146,41 @@
 </head>
 
 <body>
-    <h1>🔍 Search Results</h1>
-
     {% if error %}
     <p class="error">{{ error }}</p>
     {% else %}
-    {% if search_type == 'book' %}
-    <div class="result">
-        <h2>{{ result.title }}</h2>
-        <p><strong>Author(s):</strong> {{ result.author | join(', ') }}</p>
+    {% if search_type == "book" %}
+    <div class="book-info">
+        <h1>{{ result.title }}</h1>
+        <p><strong>Author(s):</strong> {{ result.author | join(", ") }}</p>
         <p><strong>First Published:</strong> {{ result.first_publish_year }}</p>
-        <p><strong>ISBN:</strong> {{ result.isbn if result.isbn else 'N/A' }}</p>
-    </div>
-    {% elif search_type == 'author' %}
-    <h2>📚 Books by {{ result.author }}</h2>
-    <ul>
-        {% for book in result.books %}
-        <li>{{ book }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endif %}
+        <p><strong>ISBN:</strong> {{ result.isbn }}</p>
+        <p><strong>Short Detail:</strong> {{ result.short_detail }}</p>
 
-    <a href="/">⬅ Search Again</a>
+        <h3>Description</h3>
+        <p>{{ result.description }}</p>
+
+        <p><strong>Genres:</strong> {{ result.genre | join(", ") }}</p>
+        <p><strong>Categories:</strong> {{ result.categories | join(", ") }}</p>
+        <p><strong>Average Rating:</strong> <span class="rating">{{ result.average_rating }}</span> ({{
+            result.ratings_count }} ratings)</p>
+        <p><strong>Page Count:</strong> {{ result.page_count }}</p>
+        <p><strong>Publisher:</strong> {{ result.publisher }}</p>
+        <p><strong>Published Date:</strong> {{ result.published_date }}</p>
+    </div>
+
+    {% elif search_type == "author" %}
+    <div class="author-info">
+        <h1>Books by {{ result.author }}</h1>
+        <ul>
+            {% for book in result.books %}
+            <li>{{ book }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endif %}
+    <a href="/" class="back-link">← Back to Search</a>
 </body>
 
 </html>
