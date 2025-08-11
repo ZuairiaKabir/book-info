@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>My Book Info World</title>
+    <style>
+        /* Background gradient */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 2rem auto;
+            background: linear-gradient(135deg, #f0f4f8, #d9eafc);
+            color: #333;
+        }
+
+        /* Heading styling */
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #2c3e50;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #2980b9;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Description text */
+        p {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        /* Form box */
+        form {
+            background: #ffffff;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            animation: slideIn 0.8s ease-in-out;
+        }
+
+        label {
+            font-weight: 600;
+            margin-top: 1rem;
+            display: block;
+            color: #444;
+        }
+
+        input[type=text],
+        select {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.4rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input[type=text]:focus,
+        select:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 6px rgba(41, 128, 185, 0.4);
+            outline: none;
+        }
+
+        /* Fancy button */
+        button {
+            margin-top: 1.5rem;
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #1c5980, #2471a3);
+        }
+
+        /* Result box */
+        .result {
+            background: #fff;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .result:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Error message */
+        .error {
+            color: #e74c3c;
+            font-weight: 700;
+            background: #fceae9;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            color: #777;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>📚 Welcome to My Book Info World</h1>
+    <p>Search for book information by title or list all books by an author.</p>
+
+    <form method="POST" action="/search">
+        <label for="search_type">Choose search type:</label>
+        <select id="search_type" name="search_type" required>
+            <option value="">-- Select --</option>
+            <option value="book">Book Title</option>
+            <option value="author">Author Name</option>
+        </select>
+
+        <label for="query">Enter your query:</label>
+        <input type="text" id="query" name="query" placeholder="Type here..." required />
+
+        <button type="submit">🔍 Search</button>
+    </form>
+
+    <div class="footer">
+        <p>Powered by Open Library API</p>
+    </div>
+</body>
+
+</html>
